@@ -6,12 +6,14 @@ import sys
 import json
 from datetime import datetime
 import collections
+import urllib3
 
 import pkg_resources
 from jsonschema.validators import Draft4Validator
 import singer
 
 logger = singer.get_logger()
+http = urllib3.PoolManager()
 
 def emit_state(state):
     if state is not None:
@@ -46,6 +48,15 @@ def persist_lines(config, lines):
         except json.decoder.JSONDecodeError:
             logger.error("Unable to parse:\n{}".format(line))
             raise
+
+        ### Rest api
+        try:
+            http.request('POST', 'http://localhost:8080/echo',
+                headers={'Content-Type': 'application/json'}, body=line);
+            logger.info("POST successful to localhost:8080/echo for ", line)
+        except:
+            logger.error("Unable to hit endpoint")
+        ### End of rest api
 
         if 'type' not in o:
             raise Exception("Line is missing required key 'type': {}".format(line))

@@ -10,7 +10,7 @@ setup(
     classifiers=["Programming Language :: Python :: 3 :: Only"],
     py_modules=["target_rest_api"],
     install_requires=[
-        "singer-python>=5.0.12",
+        "singer-python>=5.0.12","urllib3>=1.26.7"
     ],
     entry_points="""
     [console_scripts]
