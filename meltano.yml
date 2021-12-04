@@ -1,0 +1,29 @@
+version: 1
+send_anonymous_usage_stats: true
+project_id: e4634083-a183-4f60-b19d-7cf8c7ddc161
+plugins:
+  extractors:
+  - name: tap-gitlab
+    variant: meltanolabs
+    pip_url: git+https://github.com/MeltanoLabs/tap-gitlab.git
+    config:
+      projects: meltano/meltano meltano/sdk
+      start_date: '2021-10-01T00:00:00Z'
+    select:
+    - commits.id
+    - commits.project_id
+    - commits.created_at
+    - commits.author_name
+    - commits.message
+    - tags.*
+    - '!*.*_url'
+  loaders:
+  - name: target-jsonl
+    variant: andyh1203
+    pip_url: target-jsonl
+    config:
+      destination_path: my_jsonl_files
+  - name: target-rest-api
+    namespace: target_rest_api
+    pip_url: -e extract/target-rest-api
+    executable: target-rest-api

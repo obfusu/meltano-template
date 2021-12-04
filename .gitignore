@@ -1,0 +1,6 @@
+/venv
+/.meltano
+.env
+
+my_jsonl_files
+.DS_Store
